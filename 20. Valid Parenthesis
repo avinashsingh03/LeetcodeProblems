@@ -1,0 +1,24 @@
+
+class Solution {
+public:
+    bool isValid(string s) {
+        vector<char> stk;
+        int top=-1;
+        for(int i=0;i<s.length();i++){ 
+            //Pushing parenthesis to stack
+            stk.push_back(s[i]);
+            top++;
+            //checking conditon to pop the matching parenthesis
+            if(top>0 && ((stk[top]==')'&&stk[top-1]=='(')||(stk[top]=='}'&&stk[top-1]=='{')||(stk[top]==']'&&stk[top-1]=='['))){
+                stk.pop_back();
+                stk.pop_back();
+                top-=2;
+            }
+            
+        }
+        if(top==-1){
+            return true;
+        }
+        return false;
+    }
+}; 
