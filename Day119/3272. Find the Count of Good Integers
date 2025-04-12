@@ -1,0 +1,94 @@
+class Solution {
+    long long ans=0;
+    vector<long long> pw;
+    vector<long long> fc;
+    unordered_set<long long> xp;
+    long long rc(long long nu)
+    {
+         vector<long long> ct(10);
+        while(nu)
+        {
+            ct[nu%10]++;
+            nu/=10;
+        }
+        long long x=0;
+        for(int i=9;i>=0;i--)
+        {
+            while(ct[i]--)
+            {
+                x=x*10+i;
+            }
+        }
+        return x;
+    }
+    long long clc(long long nu,int n)
+    {
+        vector<long long> ct(10);
+        while(nu)
+        {
+            ct[nu%10]++;
+            nu/=10;
+        }
+        long long x=fc[n];
+        for(int i=0;i<=9;i++)
+        {
+            x/=fc[ct[i]];
+        }
+        
+        if(ct[0])
+        {
+            long long a=fc[n-1];
+            for(int i=1;i<=9;i++)
+            {
+                a/=fc[ct[i]];
+            }
+            if(ct[0]>1)
+            a/=fc[ct[0]-1];
+            x-=a;
+        }
+        return x;
+
+    }
+    void fn(int i,long long cu,int n,int k)
+    {
+        if(i>n-i-1)
+        {
+            if(cu%k==0)
+            {
+                xp.insert(rc(cu));
+            }
+            return;
+
+        }
+        for(int j=0+(i==0);j<=9;j++)
+        {
+             long long te=cu;
+             te+=pw[n-i-1]*j;
+             if(i!=n-1-i)
+             te+=pw[i]*j;
+             fn(i+1,te,n,k);
+
+        }
+    }
+public:
+    long long countGoodIntegers(int n, int k) {
+        long long x=1;
+        fc.push_back(1);
+        long long te=1;
+        for(int i=0;i<n;i++)
+        {
+            pw.push_back(x);
+            x*=10;
+            te*=(i+1);
+            fc.push_back(te);
+        }
+        fn(0,0,n,k);
+        for(auto &i: xp)
+        {
+            
+            ans+=clc(i,n);
+        }
+        return ans;
+        
+    }
+};
