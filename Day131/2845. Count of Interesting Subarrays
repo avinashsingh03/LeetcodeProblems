@@ -1,5 +1,5 @@
 class Solution {
-public:
+public: 
     long long countInterestingSubarrays(vector<int>& nums, int modulo, int k) {
         unordered_map<int, long long> count;
         count[0] = 1;
