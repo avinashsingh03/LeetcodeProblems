@@ -1,0 +1,14 @@
+class Solution(object):
+    def numEquivDominoPairs(self, dominoes):
+        count = {}
+        res = 0
+
+        for a, b in dominoes:
+            key = tuple(sorted((a, b))) 
+            if key in count:
+                res += count[key]  # Existing dominoes can pair with current
+                count[key] += 1
+            else:
+                count[key] = 1
+
+        return res
