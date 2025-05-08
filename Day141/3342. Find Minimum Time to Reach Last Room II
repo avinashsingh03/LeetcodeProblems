@@ -1,0 +1,37 @@
+
+class Solution {
+public:
+    int minTimeToReach(vector<vector<int>>& moveTime) {
+        constexpr array<int, 5> Delta{1, 0, -1, 0, 1}; // Dirs
+        const auto& M = moveTime;
+        const int nr = M.size(), nc = M[0].size();
+        // d[r][c] is the earliest reach/discover timestamp of the cell.
+        vector<vector<int>> d(nr, vector<int>(nc, INT_MAX));
+        // Item is < distance, row, col, is_even >
+        using Item = tuple<int, short, short, bool>;
+        priority_queue<Item, vector<Item>, greater<>> pq;
+        d[0][0] = 0;
+        pq.emplace(0, 0, 0, false);
+        while (!pq.empty()) {
+            auto [t, r, c, isEven] = pq.top();
+            pq.pop();
+            // explore four neighbors
+            for (int i = 0; i < 4; ++i) {
+                int r1 = r + Delta[i];
+                int c1 = c + Delta[i + 1];
+                if (0 <= r1 && r1 < nr && 0 <= c1 && c1 < nc) {
+                    int ts = max(t, M[r1][c1]) + 1 + isEven;
+                    if (ts < d[r1][c1]) {
+                        d[r1][c1] = ts;
+                        if (r1 == nr - 1 && c1 == nc - 1) {
+                            // reached the destination/goal
+                            return ts;
+                        }
+                        pq.emplace(ts, r1, c1, !isEven);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+};
