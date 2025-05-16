@@ -1,0 +1,39 @@
+class Solution {
+public:
+    bool differByOneChar(string a, string b) {
+        if (a.length() != b.length()) return false;
+        int diff = 0;
+        for (int i = 0; i < a.length(); i++) diff += (a[i] != b[i]);
+        return diff == 1;
+    }
+
+    vector<string> getWordsInLongestSubsequence(vector<string>& w, vector<int>& g) {
+        int n = w.size();
+        vector<int> dp(n, 1), p(n, -1);
+        int maxLen = 1, lastIdx = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (g[i] != g[j] && differByOneChar(w[i], w[j]) && dp[i] < dp[j] + 1) {
+                    dp[i] = dp[j] + 1;
+                    p[i] = j;
+                }
+            }
+            if (dp[i] > maxLen) {
+                maxLen = dp[i];
+                lastIdx = i;
+            }
+        }
+
+        vector<string> res;
+        while (lastIdx != -1) {
+            res.push_back(w[lastIdx]);
+            int prev = lastIdx;
+            lastIdx = p[lastIdx];
+            if (lastIdx == prev) break;
+        }
+
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
