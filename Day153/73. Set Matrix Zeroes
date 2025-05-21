@@ -1,1 +1,24 @@
-code.
+class Solution {
+public:
+
+void setZeroes(vector<vector<int>>& matrix) {
+    int m=matrix.size();
+    int n=matrix[0].size();
+    vector<pair<int,int>> vptr;
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            if(matrix[i][j]==0){
+                vptr.push_back({i,j});
+            }
+        }
+    }
+    for(auto x:vptr){
+        for(int i=0;i<n;i++){
+            matrix[x.first][i]=0;
+        }
+        for(int j=0;j<m;j++){
+            matrix[j][x.second]=0;
+        }
+    }
+}
+};
