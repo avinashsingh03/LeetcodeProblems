@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int maxRemoval(vector<int>& nums, vector<vector<int>>& queries) {
+        sort(queries.begin(), queries.end());
+        int ind = 0;
+        int n = nums.size();
+        int cur = 0; // current index minus value
+        priority_queue<int> cand; 
+        priority_queue<int, vector<int>, greater<int>> end;
+        for(int i=0; i<n; ++i){
+            int val = nums[i];
+            // put query into candidate
+            while(ind < queries.size() && queries[ind][0] == i){
+                cand.push(queries[ind][1]);
+                ++ind;
+            }
+            // Use the candidate to be minus value
+            while(cur < val && !cand.empty() && cand.top() >= i){
+                ++cur;
+                end.push(cand.top());
+                cand.pop();
+            }
+            if(cur < val)
+                return -1;  // does not have enough candidate
+            // remove the minus value when touch the end
+            while(!end.empty() && end.top() == i){
+                --cur;
+                end.pop();
+            }
+        }
+        return cand.size();
+    }
+};
