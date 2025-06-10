@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int maxDifference(string s) {
+        map<char,int> mpp;
+        for(int i=0; i<s.size(); i++){
+            mpp[s[i]]+=1;
+        }
+        int e_mini= INT_MAX;
+        int o_maxi= INT_MIN;
+        for( auto it: mpp){
+            if( it.second%2==0 && it.second<e_mini) e_mini=it.second;
+            if( it.second%2!=0 && it.second>o_maxi) o_maxi=it.second;
+        }
+        return o_maxi- e_mini;
+    }
+};
