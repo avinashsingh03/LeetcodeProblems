@@ -1,0 +1,35 @@
+class Solution {
+    int solve(char a, char b, string &s, int k) {
+        int n = s.length(), ans = INT_MIN;
+        vector<int> prefixA(n + 1), prefixB(n + 1);
+        vector<vector<int>> g(2, vector<int>(2, INT_MAX));
+        for(int start = 1, end = 1; end <= n; end++) {
+            prefixA[end] = prefixA[end - 1] + (s[end - 1] == a);
+            prefixB[end] = prefixB[end - 1] + (s[end - 1] == b);
+            int parityA = prefixA[end] % 2;
+            int parityB = prefixB[end] % 2;
+            while(start <= end - k + 1 && prefixA[start - 1] < prefixA[end] && prefixB[start - 1] < prefixB[end]) {
+                int prevParityA = prefixA[start - 1] % 2;
+                int prevParityB = prefixB[start - 1] % 2;
+                g[prevParityA][prevParityB] = min(g[prevParityA][prevParityB], prefixA[start - 1] - prefixB[start - 1]);
+                start++;
+            } 
+            if(g[1 - parityA][parityB] != INT_MAX) {
+                ans = max(ans, (prefixA[end] - prefixB[end]) - g[1 - parityA][parityB]);
+            } 
+        }
+        return ans;
+    }
+public:
+    int maxDifference(string s, int k) {
+        int ans = INT_MIN;
+        for(char a = '0'; a < '5'; a++) {
+            for(char b = '0'; b < '5'; b++) {
+                if(a == b) continue;
+                int val = solve(a, b, s, k);
+                ans = max(ans, val);
+            }
+        }
+        return ans == INT_MIN? -1: ans;
+    }
+};
