@@ -1,0 +1,19 @@
+class Solution(object):
+    def maxDiff(self, num):
+        """
+        :type num: int
+        :rtype: int
+        """
+        number=str(num)
+        a=number
+        for x in number:
+            if(x!="9"):
+                a=number.replace(x,"9")
+                break
+        b=number.replace(number[0],"1")
+        for x in range(1,len(number)):
+            bNew=number.replace(number[x],"0")
+            if(bNew<b and bNew[0]!="0"):
+                b=bNew
+        return int(a)-int(b)
+        
