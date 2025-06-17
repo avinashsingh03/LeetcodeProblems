@@ -1,0 +1,58 @@
+
+class Solution {
+    
+public:
+#define ll long long
+    const int MOD  = 1e9+7;
+    static const int MAX = 100001; 
+ll factoriall[MAX];
+ll inv_factorial_arr[MAX];
+
+ void precompute_factorials() {
+       
+        factoriall[0] = 1;
+        for (int i = 1; i < MAX; i++) {
+            factoriall[i] = (factoriall[i - 1] * i) % MOD;
+        }
+
+        // Compute inverse of factorial[MAX-1] using Fermat's Little Theorem
+        inv_factorial_arr[MAX - 1] = bin_pow(factoriall[MAX - 1], MOD - 2, MOD);
+
+        // Compute inverse factorials in reverse order
+        for (int i = MAX - 2; i >= 0; i--) {
+            inv_factorial_arr[i] = (inv_factorial_arr[i + 1] * (i + 1)) % MOD;
+        }
+    }
+     
+
+
+// Binary exponentiation
+ll bin_pow(ll base, ll exp, ll mod) {
+    ll result = 1;
+    while (exp > 0) {
+        if (exp % 2 == 1) result = (result * base) % mod;
+        base = (base * base) % mod;
+        exp /= 2;
+    }
+    return result;
+}
+
+// nCr calculation using precomputed factorials
+ ll comb(int a, int b) {
+       
+        return (factoriall[a] * inv_factorial_arr[b] % MOD) * inv_factorial_arr[a - b] % MOD;
+    }
+    int countGoodArrays(int n, int m, int k) {
+        // n-1 c k * m * 1* (m-1)^(n-1-k)
+      
+             precompute_factorials();
+             
+   
+        ll parta = comb(n-1,k);
+        ll partb = (m*bin_pow(m-1,n-1-k,MOD))%MOD;
+        ll res = (parta%MOD * partb%MOD)%MOD;
+        return (int)res;
+
+
+    }
+};
