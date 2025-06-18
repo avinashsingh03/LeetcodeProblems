@@ -1,0 +1,18 @@
+class Solution(object):
+    def divideArray(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: List[List[int]]
+
+        """
+        nums.sort()
+        lst2=[]
+        for i in range(0,len(nums)-2,3):
+            lst2.append([nums[i],nums[i+1],nums[i+2]])
+        for j in lst2:
+            if((max(j) -min(j))>k):
+                lst2=[]
+                break
+        return lst2
+        
