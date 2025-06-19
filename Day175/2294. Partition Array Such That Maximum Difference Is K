@@ -1,0 +1,19 @@
+class Solution(object):
+    def partitionArray(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        nums.sort()
+        count=1
+        minimum=nums[0]
+        for i in range(0,len(nums)):
+            if(nums[i]-minimum<=k):
+                continue
+            
+            else:
+                minimum=nums[i]
+                count+=1
+        return count
+        
