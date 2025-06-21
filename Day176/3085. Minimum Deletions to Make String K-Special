@@ -1,0 +1,19 @@
+class Solution(object):
+    def minimumDeletions(self, word, k):
+        from collections import Counter
+        freq = Counter(word)
+        values = sorted(freq.values())
+        n = len(values)
+        res = float('inf')
+        
+        for i in range(n):
+            target = values[i]  # Try this as the minimum frequency
+            deletions = 0
+            for f in values:
+                if f < target:
+                    deletions += f
+                elif f > target + k:
+                    deletions += f - (target + k)
+            res = min(res, deletions)
+        
+        return res
