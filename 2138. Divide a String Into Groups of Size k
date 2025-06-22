@@ -1,0 +1,17 @@
+class Solution(object):
+    def divideString(self, s, k, fill):
+        """
+        :type s: str
+        :type k: int
+        :type fill: str 
+        :rtype: List[str]
+        """
+        answer=[]
+        size=len(s)
+        remaining=size%k
+        i=0
+        for i in range(k,size-remaining+k,k): #first adding valid strings
+            answer.append(s[i-k:i])
+        if(remaining!=0):
+            answer.append((s[i:] + fill*(k-remaining))) #condition to add left + extra string
+        return answer
