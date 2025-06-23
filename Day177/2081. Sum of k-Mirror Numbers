@@ -1,0 +1,57 @@
+class Solution(object):
+    def kMirror(self, k, n):
+        """
+        :type k: int
+        :type n: int
+        :rtype: int
+        """
+        def to_base_k(num, k):
+            if num == 0:
+                return "0"
+            digits = []
+            while num > 0:
+                digits.append(str(num % k))
+                num //= k
+            return ''.join(reversed(digits))
+        
+        def is_palindrome(s):
+            return s == s[::-1]
+        
+        def generate_palindromes():
+            """Generator that yields decimal palindromes in ascending order"""
+            # Single digit palindromes
+            for i in range(1, 10):
+                yield i
+            
+            # Multi-digit palindromes
+            length = 2
+            while True:
+                # Generate palindromes of current length
+                half_len = (length + 1) // 2
+                start = 10 ** (half_len - 1)
+                end = 10 ** half_len
+                
+                for i in range(start, end):
+                    s = str(i)
+                    if length % 2 == 0:
+                        # Even length: mirror the entire half
+                        palindrome = s + s[::-1]
+                    else:
+                        # Odd length: mirror all but the middle digit
+                        palindrome = s + s[-2::-1]
+                    yield int(palindrome)
+                
+                length += 1
+        
+        # Find first n k-mirror numbers
+        k_mirrors = []
+        
+        for decimal_palindrome in generate_palindromes():
+            # Check if this decimal palindrome is also a base-k palindrome
+            base_k_repr = to_base_k(decimal_palindrome, k)
+            if is_palindrome(base_k_repr):
+                k_mirrors.append(decimal_palindrome)
+                if len(k_mirrors) == n:
+                    break
+        
+        return sum(k_mirrors)
