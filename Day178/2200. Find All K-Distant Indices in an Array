@@ -1,0 +1,22 @@
+class Solution(object):
+    def findKDistantIndices(self, nums, key, k):
+        """
+        :type nums: List[int]
+        :type key: int
+        :type k: int
+        :rtype: List[int]
+        """
+        valid=[]
+        ans=[]
+        for i in range(0,len(nums)):
+            if(nums[i]==key):
+                valid.append(i)
+        for i in range(0,len(nums)):
+            for j in range(0,len(valid)):
+                if(abs(i-valid[j])<=k):
+                    ans.append(i)
+                    break
+                # if(i>valid[j] and (abs(i-valid[j])>k)):
+                #     break
+        ans.sort()
+        return ans
