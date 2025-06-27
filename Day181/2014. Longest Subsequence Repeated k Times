@@ -1,0 +1,65 @@
+class Solution {
+public:
+    struct TrieNode {
+        unordered_map<char, TrieNode*> children;
+    };
+
+    string longestSubsequenceRepeatedK(string s, int k) {
+        int n = s.size();
+        vector<int> freq(26, 0);
+        for (char c : s) freq[c - 'a']++;
+
+        string allowed = "";
+        for (int i = 25; i >= 0; --i)
+            if (freq[i] >= k) allowed += char('a' + i);
+
+        int m = allowed.size();
+
+        vector<vector<int>> next(n + 2, vector<int>(26, n));
+        for (int i = n - 1; i >= 0; --i) {
+            next[i] = next[i + 1];
+            next[i][s[i] - 'a'] = i;
+        }
+
+        for (int len = 7; len >= 1; --len) {
+            string best = "";
+            TrieNode* root = new TrieNode();
+            dfs("", root, allowed, len, next, n, k, best);
+            if (!best.empty()) return best;
+        }
+
+        return "";
+    }
+
+    void dfs(string curr, TrieNode* node, const string &allowed, int len,
+             const vector<vector<int>> &next, int n, int k, string &best) {
+        if (!best.empty()) return;
+
+        if (curr.length() == len) {
+            if (check(curr, k, next, n)) best = curr;
+            return;
+        }
+
+        for (char c : allowed) {
+            if (!node->children.count(c))
+                node->children[c] = new TrieNode();
+
+            string nextStr = curr + c;
+
+            if (check(nextStr, k, next, n))
+                dfs(nextStr, node->children[c], allowed, len, next, n, k, best);
+        }
+    }
+
+    bool check(const string &t, int k, const vector<vector<int>> &next, int n) {
+        int pos = 0;
+        for (int rep = 0; rep < k; ++rep) {
+            for (char c : t) {
+                if (pos >= n) return false;
+                pos = next[pos][c - 'a'] + 1;
+                if (pos > n) return false;
+            }
+        }
+        return true;
+    }
+};
