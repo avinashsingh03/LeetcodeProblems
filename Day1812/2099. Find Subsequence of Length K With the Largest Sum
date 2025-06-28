@@ -1,0 +1,21 @@
+class Solution(object):
+    def maxSubsequence(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: List[int]
+        """
+        # Step 1: Pair each number with its index
+        indexed = [(num, idx) for idx, num in enumerate(nums)]
+        
+        # Step 2: Sort by value descending (highest first), but keep index
+        indexed.sort(key=lambda x: (-x[0], x[1]))
+        
+        # Step 3: Take top k elements
+        top_k = indexed[:k]
+        
+        # Step 4: Sort those by original index to preserve order
+        top_k.sort(key=lambda x: x[1])
+        
+        # Step 5: Extract the numbers
+        return [num for num, idx in top_k]
