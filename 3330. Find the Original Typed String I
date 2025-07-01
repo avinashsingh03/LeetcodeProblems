@@ -1,0 +1,16 @@
+class Solution(object):
+    def possibleStringCount(self, word):
+        """
+        :type word: str
+        :rtype: int
+        """
+        ans=1
+        size=len(word) 
+        i=0
+        while(i<(size-1)):
+            if(word[i]==word[i+1] ):
+                ans+=1
+                i+=1
+            else:
+                i+=1
+        return ans       
