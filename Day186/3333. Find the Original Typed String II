@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+#define ll long long
+
+class Solution {
+public:
+    const int M = 1e9 + 7;
+    int possibleStringCount(string word, int k) {
+        int n = word.size();
+        ll res = 1;
+        vector<int> w;
+        int i = 0;
+        while (i < n) {
+            int ctr = 1;
+            while ((i < n - 1) && (word[i] == word[i + 1])) {
+                i++;
+                ctr++;
+            }
+            res = (res * ctr) % M;
+            w.push_back(ctr);
+            i++;
+        }
+        vector<ll> dp(k, 1), ndp(k);
+        for (int i = min((int)(w.size()), k + 2) - 1; i >= 0;
+             i--) {
+            vector<ll> pf(k + 1, 0);
+            for (int j = 0; j < k; j++) {
+                pf[j + 1] = (pf[j] + dp[j]) % M;
+            }
+            for (int rem = 0; rem < k; rem++) {
+                int x = min(w[i], rem);
+                ndp[rem] = (pf[rem] - pf[rem - x] + M) % M;
+            }
+            dp = ndp;
+             }
+        res = (res - dp[k - 1] + M) % M;
+        return (int)(res);
+    }
+};
