@@ -1,0 +1,29 @@
+class Solution(object):
+    def kthCharacter(self, k, operations):
+        """
+        :type k: int
+        :type operations: List[int]
+        :rtype: str
+        """
+        # Step 1: Precompute lengths after each operation
+        lengths = [1]  # Initial string: "a"
+        for op in operations:
+            new_length = lengths[-1] * 2
+            lengths.append(new_length)
+
+        # Step 2: Recursively find the character
+        def find_char(index, level, ch):
+            if level == 0:
+                return ch
+            half = lengths[level - 1]
+            op = operations[level - 1]
+            if index < half:
+                return find_char(index, level - 1, ch)
+            else:
+                original = find_char(index - half, level - 1, ch)
+                if op == 0:
+                    return original
+                else:
+                    return chr(((ord(original) - ord('a') + 1) % 26) + ord('a'))
+
+        return find_char(k - 1, len(operations), 'a')
