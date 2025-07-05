@@ -1,0 +1,13 @@
+class Solution(object):
+    def findLucky(self, arr):
+        """
+        :type arr: List[int]
+        :rtype: int
+        """
+        ans=-1
+        freq=Counter(arr)
+        for i in freq:
+            if i==freq[i]:
+                ans=max(ans,i)
+        return ans
+        
