@@ -1,0 +1,36 @@
+import heapq
+
+class Solution:
+    def maxEvents(self, events):
+        """
+        :type events: List[List[int]]
+        :rtype: int
+        """
+        events.sort()
+        n = len(events)
+        pos = 0
+        time = 1
+        attended = 0
+        min_heap = []
+        
+        while pos < n or min_heap:
+            # Time skip: to cover only timeline covered by at least one event
+            if not min_heap:
+                time = max(time, events[pos][0])
+            
+            # Add events starting at current time
+            while pos < n and events[pos][0] == time:
+                heapq.heappush(min_heap, events[pos][1])
+                pos += 1
+            
+            # Remove all already ended (unattended) events
+            while min_heap and min_heap[0] < time:
+                heapq.heappop(min_heap)
+            
+            # Pop 1 event at current time
+            if min_heap:
+                heapq.heappop(min_heap)
+                attended += 1
+            time += 1
+        
+        return attended
