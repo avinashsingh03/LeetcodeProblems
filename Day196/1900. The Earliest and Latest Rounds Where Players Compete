@@ -1,0 +1,102 @@
+class Solution {
+public:
+    vector<int> earliestAndLatest(int n, int firstPlayer, int secondPlayer) {
+        // Memoization map: key = (n, first, second), value = {earliest, latest}
+        unordered_map<string, vector<int>> memo;
+        
+        auto result = solve(n, firstPlayer, secondPlayer, memo);
+        return {result.first, result.second};
+    }
+    
+private:
+    pair<int, int> solve(int n, int first, int second, unordered_map<string, vector<int>>& memo) {
+        // Base case: if they are adjacent and will compete this round
+        if (first + second == n + 1) {
+            return {1, 1};
+        }
+        
+        // Create memoization key
+        string key = to_string(n) + "," + to_string(first) + "," + to_string(second);
+        if (memo.find(key) != memo.end()) {
+            return {memo[key][0], memo[key][1]};
+        }
+        
+        int earliest = INT_MAX, latest = 0;
+        
+        // Try all possible outcomes for this round
+        // We need to consider all ways the players can advance
+        vector<vector<int>> outcomes = generateOutcomes(n, first, second);
+        
+        for (auto& outcome : outcomes) {
+            int newN = outcome[0];
+            int newFirst = outcome[1];
+            int newSecond = outcome[2];
+            
+            auto subResult = solve(newN, newFirst, newSecond, memo);
+            earliest = min(earliest, subResult.first + 1);
+            latest = max(latest, subResult.second + 1);
+        }
+        
+        memo[key] = {earliest, latest};
+        return {earliest, latest};
+    }
+    
+    vector<vector<int>> generateOutcomes(int n, int first, int second) {
+        vector<vector<int>> outcomes;
+        
+        // Generate all possible ways players can advance to next round
+        // This is a complex combinatorial problem
+        // We need to consider all valid tournament brackets
+        
+        // For simplicity, we'll use a recursive approach with bit manipulation
+        // to represent which players advance
+        
+        int totalMasks = 1 << n;
+        
+        for (int mask = 0; mask < totalMasks; mask++) {
+            if (__builtin_popcount(mask) != (n + 1) / 2) continue;
+            
+            // Check if this mask represents a valid tournament outcome
+            if (!isValidMask(mask, n, first, second)) continue;
+            
+            // Calculate new positions
+            int newFirst = -1, newSecond = -1;
+            int pos = 0;
+            
+            for (int i = 0; i < n; i++) {
+                if (mask & (1 << i)) {
+                    pos++;
+                    if (i + 1 == first) newFirst = pos;
+                    if (i + 1 == second) newSecond = pos;
+                }
+            }
+            
+            if (newFirst != -1 && newSecond != -1) {
+                outcomes.push_back({(n + 1) / 2, newFirst, newSecond});
+            }
+        }
+        
+        return outcomes;
+    }
+    
+    bool isValidMask(int mask, int n, int first, int second) {
+        // Check if both target players advance
+        if (!(mask & (1 << (first - 1))) || !(mask & (1 << (second - 1)))) {
+            return false;
+        }
+        
+        // Check tournament pairing rules
+        // In each round, player i competes with player (n + 1 - i)
+        for (int i = 0; i < n / 2; i++) {
+            int left = i;
+            int right = n - 1 - i;
+            
+            // Exactly one of the pair should advance
+            if (((mask & (1 << left)) ? 1 : 0) + ((mask & (1 << right)) ? 1 : 0) != 1) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+};
