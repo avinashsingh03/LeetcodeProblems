@@ -1,0 +1,22 @@
+class Solution(object):
+    def isValid(self, word):
+        """
+        :type word: str
+        :rtype: bool
+        """
+        vowel=["a","e","i","o","u","A","E","I","O","U"]
+        num=["0","1","2","3","4","5","6","7","8","9"]
+        length=len(word)
+        if(length<3):
+            return False 
+        n=v=c=False
+        for i in word:
+            if(i=="@" or i=="#" or i=="$"):
+                return False
+            elif(i in num):
+                n=True
+            elif(i in vowel):
+                v=True
+            else: 
+                c=True
+        return (v and c);True,False
