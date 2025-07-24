@@ -1,0 +1,74 @@
+class Solution {
+public:
+    void dfs(int node,int parent,unordered_map<int,vector<int>>& adj,vector<int>& subTreeXOR,vector<int>& inTime,vector<int>& outTime,vector<int>& nums,int& timer)
+    {
+        subTreeXOR[node] = nums[node];
+        inTime[node] = timer;
+        timer++;
+
+        for(int &ngbr : adj[node])
+        {
+            if(ngbr != parent)
+            {
+                dfs(ngbr,node,adj,subTreeXOR,inTime,outTime,nums,timer);
+                subTreeXOR[node] ^= subTreeXOR[ngbr];
+            }
+        }
+
+        outTime[node] = timer;
+        timer++;
+    }
+    int minimumScore(vector<int>& nums, vector<vector<int>>& edges) {
+        int n = nums.size();
+
+        unordered_map<int,vector<int>> adj;
+        for(auto& edge : edges)
+        {
+            int u = edge[0];
+            int v = edge[1];
+
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+
+        vector<int> subTreeXOR(n,0);
+
+        vector<int> inTime(n,0);
+        vector<int> outTime(n,0);
+        int timer = 0;
+        // we are taking 0 as the root
+        dfs(0,-1,adj,subTreeXOR,inTime,outTime,nums,timer);
+
+        int result = INT_MAX;
+
+        for(int u = 1;u < n;u++)
+        {
+            for(int v = u + 1;v < n;v++)
+            {
+                int xor1,xor2,xor3;
+
+                if(inTime[u] <= inTime[v] && outTime[u] >= outTime[v]) // u is an ancestor of v
+                {
+                    xor1 = subTreeXOR[v];
+                    xor2 = subTreeXOR[u] ^ xor1; // which is ultimately subTreeXOR[v]
+                    xor3 = subTreeXOR[0] ^ xor1 ^ xor2;
+                }
+                else if(inTime[v] <= inTime[u] && outTime[v] >= outTime[u]) // v is an ancestor of u
+                {
+                    xor1 = subTreeXOR[u];
+                    xor2 = subTreeXOR[v] ^ xor1; // which is ultimately subTreeXOR[u]
+                    xor3 = subTreeXOR[0] ^ xor1 ^ xor2;
+                }
+                else
+                {
+                    xor1 = subTreeXOR[u];
+                    xor2 = subTreeXOR[v];
+                    xor3 = subTreeXOR[0] ^ xor1 ^ xor2;
+                }
+
+                result = min(result, max({xor1,xor2,xor3}) - min({xor1,xor2,xor3}));
+            }
+        }
+        return result;
+    }
+};
