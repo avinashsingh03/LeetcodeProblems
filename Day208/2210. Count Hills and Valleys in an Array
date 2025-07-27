@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int countHillValley(vector<int>& nums)
+    {
+        //brute force approach
+        //time complexity: O(n)
+        //space complexity: O(n): due to 'vector<> unique'
+
+        int i;
+        int ans=0;
+        
+        vector<int> unique;
+        //inserting the 1st elements of 'nums' into 'unique'
+        unique.push_back(nums[0]);
+
+        //Step-1: traversing over given array, and removing adjacent duplicate elements
+        for(i=1;i<nums.size();i++)
+        {
+            //insert non-duplicate adjacent elements into 'unique'
+            if(nums[i]!=nums[i-1])
+                unique.push_back(nums[i]);
+        }
+
+        //Step-2: traversing 'unique' array and checking for count of 'hills' and 'valleys'
+        for(i=1;i<unique.size()-1;i++)
+        {
+            //storing 'previous' adjacent element
+            int a=unique[i-1];
+            //storing 'current' element
+            int b=unique[i];
+            //storing 'next' adjacent element
+            int c=unique[i+1];
+
+            // hill: (b > both neighbors)
+            // valley: (b < both neighbors)
+            //increase 'ans' count by 1 in each iteration when hill/valley element in found
+            if(((b>a) && (b>c)) || ((b<a) && (b<c)))
+                ans++;
+        }
+        return ans;
+    }
+};
