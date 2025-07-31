@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int subarrayBitwiseORs(vector<int>& arr) {
+        unordered_set<int> res;           // To hold all unique ORs
+        unordered_set<int> cur;           // ORs ending at current index
+
+        for (int num : arr) {
+            unordered_set<int> next_cur;
+            next_cur.insert(num);
+
+            for (int prev : cur) {
+                next_cur.insert(prev | num);
+            }
+
+            cur = move(next_cur);         // Efficient swap
+            for (int val : cur) {
+                res.insert(val);
+            }
+        }
+
+        return res.size();
+    }
+};
