@@ -1,1 +1,51 @@
 code
+class Solution {
+public:
+    long long minCost(vector<int>& basket1, vector<int>& basket2) {
+        unordered_map<int, int> freq1, freq2;
+        map<int, int> totalFreq;
+        int n = basket1.size();
+
+        int globalMin = INT_MAX;
+        for (int i = 0; i < n; ++i) {
+            freq1[basket1[i]]++;
+            freq2[basket2[i]]++;
+            totalFreq[basket1[i]]++;
+            totalFreq[basket2[i]]++;
+            globalMin = min({globalMin, basket1[i], basket2[i]});
+        }
+
+        // Check for parity
+        for (auto &[fruit, total] : totalFreq) {
+            if (total % 2 != 0) return -1;
+        }
+
+        vector<int> extraFrom1, extraFrom2;
+        for (auto &[fruit, total] : totalFreq) {
+            int target = total / 2;
+            int diff1 = freq1[fruit] - target;
+            int diff2 = freq2[fruit] - target;
+
+            if (diff1 > 0) {
+                for (int i = 0; i < diff1; ++i)
+                    extraFrom1.push_back(fruit);
+            } else if (diff2 > 0) {
+                for (int i = 0; i < diff2; ++i)
+                    extraFrom2.push_back(fruit);
+            }
+        }
+
+        if (extraFrom1.size() != extraFrom2.size()) return -1;
+
+        sort(extraFrom1.begin(), extraFrom1.end());
+        sort(extraFrom2.rbegin(), extraFrom2.rend()); // sort descending
+
+        long long cost = 0;
+        for (int i = 0; i < extraFrom1.size(); ++i) {
+            cost += min((long long)min(extraFrom1[i], extraFrom2[i]),
+                        2LL * globalMin);
+        }
+
+        return cost;
+    }
+};
