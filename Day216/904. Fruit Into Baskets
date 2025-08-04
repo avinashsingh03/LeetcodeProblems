@@ -1,0 +1,54 @@
+class Solution {
+public:
+    int totalFruit(vector<int>& fruits) {
+        int n=fruits.size();
+        int ans=0;
+        int el0=-1;
+        int el1=-1;
+        int i_el0=-1;
+        int i_el1=-1;
+        int cnt=0;
+        for(int i=0;i<n;i++){
+           if(el0 ==-1 || el1==-1){
+               if(el0==-1 || el0==fruits[i]){
+                   el0=fruits[i];
+                   cnt++;
+                   i_el0=i;
+               }
+               else if(el1==-1){
+                   el1=fruits[i];
+                   cnt++;
+                   i_el1=i;
+               }
+               ans=max(ans, cnt);
+           }
+           else if(fruits[i]==el0 || fruits[i]==el1){
+               if(fruits[i]==el0){
+                    cnt++;
+                    i_el0=i;
+               }
+               else{
+                   cnt++;
+                   i_el1=i;
+               }
+               ans=max(ans, cnt);
+           }
+           else{
+               if(i_el0<i_el1){
+                   cnt=i-i_el0;
+                   el0=el1;
+                   i_el0=i_el1;
+                   el1=fruits[i];
+                   i_el1=i; 
+               }
+               else{
+                   cnt=i-i_el1;
+                   el1=fruits[i];
+                   i_el1=i;
+                   
+               }
+           }         
+        }
+        return ans;
+    }
+};
