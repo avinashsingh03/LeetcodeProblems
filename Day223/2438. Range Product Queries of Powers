@@ -1,0 +1,41 @@
+class Solution(object):
+    def productQueries(self, n, queries):
+        """
+        :type n: int
+        :type queries: List[List[int]]
+        :rtype: List[int]
+        """
+        #pahle temp mein n ko binary form mein fit kro
+        temp=[]
+        while(n>0):
+            rem=n%2
+            n/=2
+            temp.append(rem)
+        powers=[]
+        val=1
+        #fir temp mein se 1 k  corresponding powers mein pow(2,i) fit kro
+        for i in range(0,len(temp)):
+            if(temp[i]==1):
+                powers.append(val)
+                val*=2
+            else:
+                val*=2
+        MOD=pow(10,9)+7
+        
+        answers=[]
+        # fir answers mein [SRARTi,ENDi] k liye powers se value fetch krk fit kro.
+        for j in range(0,len(queries)):
+            val=1
+            start=queries[j][0] 
+            end=queries[j][1]
+            while(start<=end):
+                val*=powers[start]
+                start+=1
+            answers.append(val%MOD)
+        
+        return answers
+        #hurreyy ho gya..
+        ##isko thoda aur optimize krna hai..
+
+            
+        
