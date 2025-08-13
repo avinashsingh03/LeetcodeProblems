@@ -1,0 +1,28 @@
+class Solution {
+public:
+    static const int MOD = 1000000007;
+
+    long long total(int ind, const vector<int>& arr, int n, int sum, vector<vector<long long>>& dp) {
+        if (sum > n) return 0;
+        if (sum == n) return 1;
+        if (ind == (int)arr.size()) return 0;
+        if (dp[ind][sum] != -1) return dp[ind][sum];
+        long long take = total(ind + 1, arr, n, sum + arr[ind], dp);
+        long long skip = total(ind + 1, arr, n, sum, dp);
+        return dp[ind][sum] = (take + skip) % MOD;
+    }
+
+    int numberOfWays(int n, int x) {
+        vector<int> xpower;
+        for (int i = 1; ; ++i) {
+            long long val = 1;
+            for (int j = 0; j < x; ++j) val *= i;
+            if (val > n) break;
+            xpower.push_back((int)val);
+        }
+
+        if (xpower.empty()) return 0;
+        vector<vector<long long>> dp(xpower.size(), vector<long long>(n + 1, -1));
+        return (int) total(0, xpower, n, 0, dp);
+    }
+};
