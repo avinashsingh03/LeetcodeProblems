@@ -1,0 +1,16 @@
+class Solution(object):
+    def largestGoodInteger(self, num):
+        """
+        :type num: str
+        :rtype: str
+        """
+        start=0
+        good=""
+        while(start<=(len(num)-3)):
+            if(num[start]==num[start+1] and num[start+1]==num[start+2]):
+                good=max(good,num[start])
+                start+=3
+            else:
+                start+=1
+        return good*3
+        
