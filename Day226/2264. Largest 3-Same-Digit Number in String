@@ -1,0 +1,20 @@
+#include<string>
+class Solution {
+public:
+    string largestGoodInteger(string num) {
+        int start=0;
+        char good='\0';
+        int size=num.size(); 
+        while(start<=(size-3)){
+            if(num[start]==num[start+1] && num[start+1]==num[start+2]){
+                good=max(good,num[start]);
+                start+=3;
+            }
+            else{
+                start+=1;
+            }
+        }
+        if (good == '\0') return "";
+        return string(3, good);
+    }
+};
