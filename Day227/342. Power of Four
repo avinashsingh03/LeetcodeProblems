@@ -1,0 +1,19 @@
+class Solution {
+public:
+    bool isPowerOfFour(int n) {
+        long int sum=1;
+        //saare negative no. ko hatao including 0
+        if(n<=0){
+            return false;
+        } 
+        else{
+            for(int i=0;sum<=n;i++){
+                if(sum==n){
+                    return true;
+                }
+                sum*=4;
+            }
+        }
+        return false;     
+    }
+};
