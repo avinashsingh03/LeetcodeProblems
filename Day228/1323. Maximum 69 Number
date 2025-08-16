@@ -1,0 +1,22 @@
+class Solution(object):
+    def maximum69Number (self, num):
+        """
+        :type num: int
+        :rtype: int
+        """
+        number=str(num)
+        size=len(number)
+        # finding index of first 6
+        index=0
+        while(index<size):
+            if(number[index]=='6'):
+                break
+            index+=1
+        
+        if(index==size): # 6 not found
+            return num
+        else: # 6 found
+            Sum=3*(pow(10,size-1-index))
+            num+=Sum
+        return num
+        
