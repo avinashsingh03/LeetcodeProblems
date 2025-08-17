@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> ans;
+        int top=0,bottom=matrix.size()-1,left=0,right=matrix[0].size()-1;
+        while(top<=bottom && left<=right){
+            for(int i=left;i<=right;i++){  //print top row
+                ans.push_back(matrix[top][i]);
+            }
+            top++;
+            for(int i=top;i<=bottom;i++){ //print right column
+                ans.push_back(matrix[i][right]);
+            }
+            right--;
+            if(top<=bottom){ //because top is increased in upper lines and may exceed the while condition
+                for(int i=right;i>=left;i--){//print bottom row
+                    ans.push_back(matrix[bottom][i]);
+                }
+                bottom--;
+            }
+            if(left<=right){ //because right is decreased in upper lines and may exceed the while condition
+                for(int i=bottom;i>=top;i--){//print left column
+                    ans.push_back(matrix[i][left]);
+                }
+                left++;
+            }
+        }
+        return ans;
+    }
+};
