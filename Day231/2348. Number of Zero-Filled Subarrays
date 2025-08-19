@@ -1,0 +1,20 @@
+class Solution {
+public:
+    long long zeroFilledSubarray(vector<int>& nums) {
+        long int ans=0,count=0;
+        for(int i=0;i<nums.size();i++){
+            if(nums[i]==0){ //first count the no. of consecutive zeroes
+                count++;
+                continue;
+            }
+            else if(count!=0){ //if non zero element found then add total no. of subarrays of previously counted zeroes
+                ans+=(count*(count+1))/2;
+                count=0;
+            }
+        }
+        if(count!=0){ //handling edge case
+            ans+=(count*(count+1))/2;
+        }
+        return ans;
+    }
+};
