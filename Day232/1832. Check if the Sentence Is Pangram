@@ -1,0 +1,21 @@
+class Solution {
+public:
+    bool checkIfPangram(string sentence) {
+        //if size less than 26 then it can not contain whole alphabet
+        if(sentence.size()<26){
+            return 0;
+        }
+        // mapprin each letter using vector integer
+        vector<int> alphabet(26,0);
+        for(int i=0;i<sentence.size();i++){
+            alphabet[sentence[i]-'a']=1;
+        }
+        //checkig is any zero is present
+        for(int val:alphabet){
+            if(val==0){
+                return 0;
+            }
+        }
+        return 1;
+    }
+};
