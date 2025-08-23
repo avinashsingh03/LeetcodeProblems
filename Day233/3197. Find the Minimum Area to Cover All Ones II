@@ -1,0 +1,113 @@
+class Solution {
+public:
+    int minimumArea(vector<vector<int>>& grid, int min_row, int max_row, int min_col, int max_col) {
+        const int inf = 1000;
+        int min_r = inf, max_r = -inf, min_c = inf, max_c = -inf;
+        
+        for (int i = min_row; i < max_row; ++i) {
+            for (int j = min_col; j < max_col; ++j) {
+                if (grid[i][j] == 1) {
+                    min_r = min(min_r, i);
+                    max_r = max(max_r, i);
+                    min_c = min(min_c, j);
+                    max_c = max(max_c, j);
+                }
+            }
+        }
+        
+        if (min_r == inf || min_c == inf) {
+            return 0; // No 1's in this section
+        }
+        
+        int height = max_r - min_r + 1;
+        int width = max_c - min_c + 1;
+        return height * width;
+    }
+    
+    int minimumSum(vector<vector<int>>& grid) {
+        const int inf = 1000;
+        int n = grid.size();
+        int m = grid[0].size();
+        int result = inf;
+        
+        for (int end_row = 1; end_row < n; ++end_row) {
+            for (int end_col = 1; end_col < m; ++end_col) {
+                // First rectangle
+                int first_area = minimumArea(grid, 0, end_row, 0, end_col);
+                
+                // Considering next combinations for the other two rectangles
+                int top_area = minimumArea(grid, end_row, n, 0, m);
+                int right_area = minimumArea(grid, 0, end_row, end_col, m);
+                
+                int bottom_area = minimumArea(grid, end_row, n, 0, end_col);
+                int left_area = minimumArea(grid, 0, n, end_col, m);
+                
+                // Two possible combinations of the remaining rectangles
+                int second_area = min(top_area + right_area, bottom_area + left_area);
+                
+                result = min(result, first_area + second_area);
+            }
+        }
+        
+        // Consider parallel splits along the x-axis and y-axis
+        for (int x1 = 1; x1 < n - 1; ++x1) {
+            for (int x2 = x1 + 1; x2 < n; ++x2) {
+                int top_area = minimumArea(grid, 0, x1, 0, m);
+                int middle_area = minimumArea(grid, x1, x2, 0, m);
+                int bottom_area = minimumArea(grid, x2, n, 0, m);
+                result = min(result, top_area + middle_area + bottom_area);
+            }
+        }
+        
+        for (int y1 = 1; y1 < m - 1; ++y1) {
+            for (int y2 = y1 + 1; y2 < m; ++y2) {
+                int left_area = minimumArea(grid, 0, n, 0, y1);
+                int middle_area = minimumArea(grid, 0, n, y1, y2);
+                int right_area = minimumArea(grid, 0, n, y2, m);
+                result = min(result, left_area + middle_area + right_area);
+            }
+        }
+        
+        // Case when one rectangle is [0:end_row][:] and other two rectangles split horizontally
+        for (int end_row = 1; end_row < n - 1; ++end_row) {
+            for (int split_col = 1; split_col < m; ++split_col) {
+                int top_area = minimumArea(grid, 0, end_row, 0, m);
+                int bottom_left_area = minimumArea(grid, end_row, n, 0, split_col);
+                int bottom_right_area = minimumArea(grid, end_row, n, split_col, m);
+                result = min(result, top_area + bottom_left_area + bottom_right_area);
+            }
+        }
+        
+        // Case when one rectangle is [end_row:n][:] and other two rectangles split horizontally
+        for (int end_row = 1; end_row < n - 1; ++end_row) {
+            for (int split_col = 1; split_col < m; ++split_col) {
+                int bottom_area = minimumArea(grid, end_row, n, 0, m);
+                int top_left_area = minimumArea(grid, 0, end_row, 0, split_col);
+                int top_right_area = minimumArea(grid, 0, end_row, split_col, m);
+                result = min(result, bottom_area + top_left_area + top_right_area);
+            }
+        }
+        
+        // Case when one rectangle is [:][0:end_col] and other two rectangles split vertically
+        for (int end_col = 1; end_col < m - 1; ++end_col) {
+            for (int split_row = 1; split_row < n; ++split_row) {
+                int left_area = minimumArea(grid, 0, n, 0, end_col);
+                int top_right_area = minimumArea(grid, 0, split_row, end_col, m);
+                int bottom_right_area = minimumArea(grid, split_row, n, end_col, m);
+                result = min(result, left_area + top_right_area + bottom_right_area);
+            }
+        }
+        
+        // Case when one rectangle is [:][end_col:m] and other two rectangles split vertically
+        for (int end_col = 1; end_col < m - 1; ++end_col) {
+            for (int split_row = 1; split_row < n; ++split_row) {
+                int right_area = minimumArea(grid, 0, n, end_col, m);
+                int bottom_left_area = minimumArea(grid, split_row, n, 0, end_col);
+                int top_left_area = minimumArea(grid, 0, split_row, 0, end_col);
+                result = min(result, right_area + bottom_left_area + top_left_area);
+            }
+        }
+        
+        return result;
+    }
+};
