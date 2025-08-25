@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& mat) {
+        int m = mat.size(), n = mat[0].size();
+        vector<int> ans;
+        ans.reserve(m * n);
+
+        int row = 0, col = 0;
+        bool up = true;
+
+        while(ans.size() < m * n) {
+            ans.push_back(mat[row][col]);
+
+            if(up) {
+                if(col == n - 1) { row++; up = false; }     // hit right boundary
+                else if(row == 0) { col++; up = false; }    // hit top boundary
+                else { row--; col++; }                      // move up-right
+            } else {
+                if(row == m - 1) { col++; up = true; }      // hit bottom boundary
+                else if(col == 0) { row++; up = true; }     // hit left boundary
+                else { row++; col--; }                      // move down-left
+            }
+        }
+
+        return ans;
+    }
+};
