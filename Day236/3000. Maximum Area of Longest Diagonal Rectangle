@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int areaOfMaxDiagonal(vector<vector<int>>& dimensions) {
+        long long maxDiagonal = -1; // track maximum squared diagonal
+        int maxArea = 0;           // track maximum area for that diagonal
+
+        for (auto &rect : dimensions) {
+            long long w = rect[0], h = rect[1];
+            long long diagonalSq = w * w + h * h; // squared diagonal
+            int area = w * h;
+
+            if (diagonalSq > maxDiagonal) {
+                maxDiagonal = diagonalSq;
+                maxArea = area;
+            } else if (diagonalSq == maxDiagonal) {
+                maxArea = max(maxArea, area);
+            }
+        }
+
+        return maxArea;
+    }
+};
