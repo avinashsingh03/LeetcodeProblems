@@ -1,0 +1,52 @@
+#include <vector>
+#include <cstring>
+using namespace std;
+
+class Solution {
+public:
+    int lenOfVDiagonal(vector<vector<int>>& grid) {
+        int n = grid.size(), m = grid[0].size();
+        // Directions: ↘, ↙, ↖, ↗
+        int dirs[4][2] = {{1,1}, {1,-1}, {-1,-1}, {-1,1}};
+        
+        // dp[i][j][dir][turned][expected] = longest length from this state
+        // expected: 0->expect 0, 1->expect 1, 2->expect 2
+        static int dp[505][505][4][2][3];
+        memset(dp, -1, sizeof(dp));
+        
+        function<int(int,int,int,bool,int)> dfs = [&](int i, int j, int dir, bool turned, int expected) {
+            if (i < 0 || i >= n || j < 0 || j >= m) return 0;
+            if (grid[i][j] != expected) return 0;
+            
+            int t = turned ? 1 : 0;
+            int& res = dp[i][j][dir][t][expected];
+            if (res != -1) return res;
+            
+            int next_expected = (expected == 1 ? 2 : (expected == 2 ? 0 : 2));
+            int best = 0;
+            
+            // continue straight
+            best = max(best, dfs(i + dirs[dir][0], j + dirs[dir][1], dir, turned, next_expected));
+            
+            // make one clockwise turn if not turned yet
+            if (!turned) {
+                int nd = (dir + 1) % 4;
+                best = max(best, dfs(i + dirs[nd][0], j + dirs[nd][1], nd, true, next_expected));
+            }
+            
+            return res = 1 + best;
+        };
+        
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 1) {
+                    for (int d = 0; d < 4; d++) {
+                        ans = max(ans, dfs(i, j, d, false, 1));
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
