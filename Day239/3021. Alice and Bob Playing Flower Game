@@ -1,0 +1,21 @@
+class Solution {
+public:
+    long long flowerGame(int n, int m) {
+        // Find the number of odd and even elements in the range [1, n]
+        long long odd_n = (n + 1) / 2;
+        long long even_n = n / 2;
+
+        // Find the number of odd and even elements in the range [1, m]
+        long long odd_m = (m + 1) / 2;
+        long long even_m = m / 2;
+
+        // Calculate the total number of pairs with odd differences
+        // The odd differences can occur when an odd number is paired with an even number,
+        // so we multiply the count of odd elements in n by the count of even elements in m,
+        // and add it to the product of even elements in n and odd elements in m.
+        long long odd_diff_pairs = odd_n * even_m + even_n * odd_m;
+
+        // Return the result
+        return odd_diff_pairs;
+    }
+};
