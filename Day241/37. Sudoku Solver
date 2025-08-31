@@ -1,0 +1,67 @@
+class Solution {
+public:
+    bool chk(vector<vector<char>>& board, char c, int a, int b)
+    {
+        // checking mini-square - MY method
+        // we get the range of the mini-square, check each element in it
+        int d1=a/3;
+        int d2=b/3;
+        for(int i=(3*d1); i<3*(d1+1); i++)
+        {
+            for(int j=(3*d2); j<3*(d2+1); j++)
+            {
+                if(board[i][j]==c) return false;
+            }
+        }
+
+        // checking the row and col of the element, o make sure no duplicate element
+        for(int i=0; i<9; i++) {
+            //check col
+            if(board[i][b]==c) return false;
+
+            // check row
+            if(board[a][i]==c) return false;
+        }
+        return true;
+    }
+
+    bool solv(vector<vector<char>>& board)
+    {
+        for(int i=0; i<9; i++){
+            for(int j=0; j<9; j++)
+            {
+                if(board[i][j]=='.')
+                {
+                    for(char c='1'; c<='9'; c++)
+                    {
+                        // only if char can be put, then we recurse further
+                        if( chk(board, c, i, j))
+                        {
+                            board[i][j] = c;
+
+                            // if the further recursion returns true, that means solved - so we return true from here too
+                            if( solv(board) )
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                // if any 1 recursion fails, we put '.' - gap again to check for further values
+                                board[i][j]='.';
+                            }
+                        }
+                    }
+                    // if any '.' i.e. gap cannot be flled, we cannot resolve the sudoku board
+                    // thus return false
+                    return false;
+                }
+            }
+        }
+        // if no gap (that can't be filled) - return true
+        return true;
+    }
+    void solveSudoku(vector<vector<char>>& board) 
+    {
+        bool ans = solv(board);
+    }
+};
