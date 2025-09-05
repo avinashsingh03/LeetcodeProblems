@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int makeTheIntegerZero(int num1, int num2) {
+        // for(int t=1;t<=36;t++){if we solve inequality it while loop go for max time =36
+        int t=0;
+        while(true){
+            long long val=(long long)num1 -(long long)t*num2;
+            if(val<0){
+                return -1;
+            }
+            if(__builtin_popcountll(val) <=t && t<=val){ //to get no. of bits.
+                return t;
+            }
+            t++;
+
+        }
+        return -1;
+
+    }
+};
