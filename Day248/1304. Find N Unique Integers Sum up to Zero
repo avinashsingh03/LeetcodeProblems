@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<int> insertNum(vector<int>& vec,int num){
+        int i=-(num/2);
+        while(i<0){
+            vec.push_back(i);
+            vec.push_back(-i);
+            i++;
+        }
+        return vec;
+    }
+    vector<int> sumZero(int n) {
+        vector<int>ans;
+        //inserting numbers for odd n
+        if(n%2!=0){ 
+            insertNum(ans,n);
+            ans.push_back(0); //to make array of size odd
+            return ans;
+        }
+        //inserting numbers of even n
+        insertNum(ans,n);
+        return ans;
+    }
+};
