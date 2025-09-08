@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<int> getNoZeroIntegers(int n) {
+
+        vector<int> ans(2);
+        int a,b,temp;
+        bool non_zero;
+        a=1;
+        b=n-a;
+        temp=b;
+        do{
+            while(temp){
+                if(temp%10==0){
+                    non_zero=1;
+                    a++;
+                    b=n-a;
+                    temp=b;
+                }
+                temp/=10;
+                non_zero=0;
+            }
+        }while(non_zero);
+        temp=a;
+        do{
+            while(temp){
+                if(temp%10==0){
+                    non_zero=1;
+                    //ye niche ki 2 line smjh k likha hai, uske niche ki 2 line glti se likh diya logic nhi pta, but working.
+                    a++;
+                    b=n-a;
+                    b--;
+                    a=n-b;
+                    temp=a;
+                }
+                temp/=10;
+                non_zero=0;
+            }
+        }while(non_zero);
+        ans[0]=a;
+        ans[1]=b;
+        return ans; 
+    }
+};
