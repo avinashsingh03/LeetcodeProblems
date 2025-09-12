@@ -1,0 +1,11 @@
+class Solution {
+public:
+    bool doesAliceWin(string s) {
+        for(auto val:s){
+            if(val=='a' ||val=='e' || val=='i' || val=='o' || val=='u'){
+                return true; //agr ek bhi vowel hua to Alice will win
+            }
+        }
+        return false;
+    }
+};
