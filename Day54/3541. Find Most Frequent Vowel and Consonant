@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int maxFreqSum(string s) {
+        vector<int> alphabet(26,0); //counting no. of occurences
+        for(auto val:s){
+            int pos=val-'a';
+            alphabet[pos]++;
+        }
+        int max_vowel=0,max_cons=0;
+        //counting maximum vowel count
+        for(int i=0;i<26;i++){ 
+            if(i==0 || i==4 || i==8 || i==14 || i==20){
+                if(alphabet[i]>max_vowel){
+                    max_vowel=alphabet[i];
+                }
+            }
+        }
+        //counting maximum consonent count
+        for(int i=0;i<26;i++){
+            if(i!=0 && i!=4 && i!=8 && i!=14 && i!=20){
+                if(alphabet[i]>max_cons){
+                    max_cons=alphabet[i];
+                }
+            }
+        }
+        return max_vowel+max_cons;
+    }
+};
