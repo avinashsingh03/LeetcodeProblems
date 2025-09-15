@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int canBeTypedWords(string text, string brokenLetters) {
+        vector<int> broken_alpha(26,0);
+        for(int i=0;i<brokenLetters.size();i++){
+            int val=brokenLetters[i]-'a';
+            broken_alpha[val]++;
+        }
+        int count=0;
+        bool found=0;
+        for(int i=0;i<text.size();i++){
+            if(text[i]==' '){
+                if(found==0){
+                    count++;
+                }
+                found=0;
+                continue;
+            }
+            if(broken_alpha[text[i]-'a']==1)
+             found=1;
+        }
+        if(found==0){
+            count++;
+        }
+        return count;
+    }
+};
