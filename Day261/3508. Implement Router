@@ -1,0 +1,92 @@
+#include <unordered_map>
+#include <vector>
+#include <queue>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+class Router {
+public:
+    int MAX_SIZE;
+    unordered_map<string, vector<int>> packetStore;    // key -> {S, D, T}
+    unordered_map<int, vector<int>> destTimeMap;       // D -> sorted timestamps
+    queue<string> que;
+
+    Router(int memoryLimit) : MAX_SIZE(memoryLimit) {}
+
+    string makeKey(int S, int D, int T) {
+        return to_string(S) + "_" + to_string(D) + "_" + to_string(T);
+    }
+
+    bool addPacket(int source, int destination, int timestamp) {
+        string key = makeKey(source, destination, timestamp);
+
+        // check if packet with same key already exists
+        if (packetStore.find(key) != packetStore.end()) {
+            return false;
+        }
+
+        // if full, forward one packet to make room
+        if (que.size() >= (size_t)MAX_SIZE) {
+            forwardPacket();
+        }
+
+        // store packet and enqueue the key
+        packetStore[key] = { source, destination, timestamp };
+        que.push(key);
+
+        // keep timestamps for each destination sorted so we can use binary search later
+        auto &vec = destTimeMap[destination];
+        vec.insert(lower_bound(vec.begin(), vec.end(), timestamp), timestamp);
+
+        return true;
+    }
+
+    // forwards (removes) the oldest enqueued packet and returns it
+    vector<int> forwardPacket() {
+        if (packetStore.empty() || que.empty()) {
+            return {}; // empty vector
+        }
+
+        string key = que.front();
+        que.pop();
+
+        auto it = packetStore.find(key);
+        if (it == packetStore.end()) return {};
+
+        vector<int> packet = it->second;
+        packetStore.erase(it);
+
+        int D = packet[1];
+        auto &vec = destTimeMap[D];
+        if (!vec.empty()) {
+            // remove the earliest timestamp (we maintain vec sorted)
+            vec.erase(vec.begin());
+            if (vec.empty()) destTimeMap.erase(D); // optional cleanup
+        }
+
+        return packet;
+    }
+
+    // count how many packets for `destination` have timestamps within [startTime, endTime]
+    int getCount(int destination, int startTime, int endTime) {
+        auto it = destTimeMap.find(destination);
+        if (it == destTimeMap.end() || it->second.empty()) {
+            return 0;
+        }
+
+        const vector<int> &timeStamps = it->second;
+        auto lo = lower_bound(timeStamps.begin(), timeStamps.end(), startTime);
+        auto hi = upper_bound(timeStamps.begin(), timeStamps.end(), endTime);
+        return static_cast<int>(hi - lo);
+    }
+};
+
+/**
+ * Your Router object will be instantiated and called as such:
+ * Router* obj = new Router(memoryLimit);
+ * bool param_1 = obj->addPacket(source,destination,timestamp);
+ * vector<int> param_2 = obj->forwardPacket();
+ * int param_3 = obj->getCount(destination,startTime,endTime);
+ */
