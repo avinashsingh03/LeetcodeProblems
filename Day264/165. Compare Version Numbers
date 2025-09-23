@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int compareVersion(string version1, string version2) {
+        int first = 0, second = 0; 
+        while (first < version1.length() || second < version2.length()) {
+            long val1 = 0, val2 = 0;
+
+            // parse version1 component
+            while (first < version1.length() && version1[first] != '.') {
+                val1 = val1 * 10 + (version1[first] - '0');
+                first++;
+            }
+            first++; // skip '.'
+
+            // parse version2 component
+            while (second < version2.length() && version2[second] != '.') {
+                val2 = val2 * 10 + (version2[second] - '0');
+                second++;
+            }
+            second++; // skip '.'
+
+            if (val1 > val2) return 1;
+            if (val1 < val2) return -1;
+        }
+        return 0;
+    }
+};
