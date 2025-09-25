@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+    
+        int n=triangle.size();
+        for(int row=1;row<n;row++){
+            for(int col=0;col<=row;col++){
+                int prev_row_up=triangle[row-1][min(col,(int)triangle[row-1].size()-1)];
+                int prev_row_left=triangle[row-1][max(col-1,0)];
+
+                triangle[row][col]+=min(prev_row_up,prev_row_left);
+
+            }
+        }
+        return *min_element(begin(triangle[n-1]),end(triangle[n-1]));
+    }
+};
