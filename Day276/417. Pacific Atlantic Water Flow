@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int m, n;
+    vector<vector<int>> dirs = {{1,0},{-1,0},{0,1},{0,-1}};
+
+    void dfs(int i, int j, vector<vector<int>>& heights, vector<vector<int>>& ocean) {
+        ocean[i][j] = 1;
+        for (auto &d : dirs) {
+            int x = i + d[0], y = j + d[1];
+            if (x < 0 || y < 0 || x >= m || y >= n) continue;
+            if (ocean[x][y]) continue;
+            if (heights[x][y] < heights[i][j]) continue; // must be >=
+            dfs(x, y, heights, ocean);
+        }
+    }
+
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
+        m = heights.size();
+        n = heights[0].size();
+        vector<vector<int>> pac(m, vector<int>(n, 0));
+        vector<vector<int>> atl(m, vector<int>(n, 0));
+
+        // Pacific edges
+        for (int i = 0; i < m; i++) dfs(i, 0, heights, pac);
+        for (int j = 0; j < n; j++) dfs(0, j, heights, pac);
+
+        // Atlantic edges
+        for (int i = 0; i < m; i++) dfs(i, n-1, heights, atl);
+        for (int j = 0; j < n; j++) dfs(m-1, j, heights, atl);
+
+        vector<vector<int>> result;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (pac[i][j] && atl[i][j])
+                    result.push_back({i, j});
+            }
+        }
+        return result;
+    }
+};
