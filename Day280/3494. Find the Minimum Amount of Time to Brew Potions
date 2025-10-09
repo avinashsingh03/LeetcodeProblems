@@ -1,0 +1,25 @@
+class Solution {
+public:
+    long long minTime(vector<int>& skill, vector<int>& mana) {
+        int n = skill.size();
+        int m = mana.size();
+        vector<long long> finishTime(n, 0);
+
+        for (int i = 0; i < m; i++) {
+
+            long long int now = finishTime[0];
+            int currPotion = mana[i];
+
+            for (int j = 1; j < n; j++) {
+                now = max(now + skill[j - 1] * 1LL * currPotion, finishTime[j]);
+            }
+            finishTime[n - 1] = now + skill[n - 1] * currPotion;
+
+            for (int j = n - 2; j >= 0; j--) {
+                finishTime[j] = finishTime[j + 1] - skill[j + 1] * currPotion;
+            }
+        }
+
+        return finishTime[n - 1];
+    }
+};
