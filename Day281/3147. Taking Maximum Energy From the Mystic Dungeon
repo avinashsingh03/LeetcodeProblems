@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int yesRec(int i, vector<int>& en, int k, vector<int>& dp)
+    {
+        if (i >= en.size())
+            return 0;
+        
+        if (dp[i] != -1)
+            return dp[i];
+        
+        return dp[i] = en[i] + yesRec(i + k, en, k, dp);
+    }
+    int maximumEnergy(vector<int>& energy, int k) {
+        int res = INT_MIN;
+        vector<int> dp(energy.size() + 1, -1);
+        for (int i = 0; i < energy.size(); i++)
+        {
+            res = max(res, yesRec(i, energy, k, dp));
+        }
+        return res;
+    }
+};
