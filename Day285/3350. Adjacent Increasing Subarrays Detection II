@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int maxIncreasingSubarrays(vector<int>& nums) {
+        int size=nums.size();
+        int k=1,incFromLeft=1;
+        vector<int> incFromRight(size,1);
+
+        for(int i=1;i<size;i++){
+            if(nums[i]>nums[i-1]){
+                incFromRight[i]=incFromRight[i-1]+1;
+            } 
+        }
+
+        for(int j=size-2;j>=0;j--){
+        
+            incFromLeft=(nums[j]<nums[j+1])?incFromLeft+1:1;
+
+            if(j>=1){
+                k=max(min(incFromLeft,incFromRight[j-1]),k);
+            }
+        }
+        return k;
+    }
+};
+
+//by self
