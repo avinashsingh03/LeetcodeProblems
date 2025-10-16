@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int findSmallestInteger(vector<int>& nums, int value) {
+        unordered_map<int,int> freq;
+        for(int n : nums) {
+            int r=((n%value)+value)%value;
+            freq[r]++;
+        }
+        for(long long i=0; ; i++){
+            int r=i%value;
+            if(freq[r]==0){ 
+                return i;
+            }
+            freq[r]--;
+        }
+    }
+};
