@@ -1,0 +1,16 @@
+class Solution {
+public:
+    bool hasSameDigits(string s) {
+        string temp="";
+        while(s.length()>=3){
+            for(int i=0;i<s.length()-1;i++){
+                temp+=(int(s[i])+ int(s[i+1]))%10;
+
+            }
+            s=temp;
+            temp="";
+        }
+        return (s[0]==s[1])?true:false;
+        
+    }
+};
