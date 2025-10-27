@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int countOne(string val){
+        int one=0;
+        for(auto value:val){
+            if(value=='1'){
+                one++;
+            }
+        } 
+        return one; 
+    }
+    int numberOfBeams(vector<string>& bank) {
+        int beams=0;
+        int prev=countOne(bank[0]);
+
+        for(int i=1;i<bank.size();i++){
+            int devices=countOne(bank[i]);
+            beams+=prev*devices;
+            if(devices!=0){
+                prev=devices;
+            }
+        }
+
+        return beams;  
+    }
+};
+
+//by self
