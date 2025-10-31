@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<int> getSneakyNumbers(vector<int>& nums) {
+        // int size=nums.size();
+        // vector<int> freq(size-2,0);
+        // vector<int> result;
+        // for(int i=0;i<size;i++){
+        //     freq[nums[i]]++;
+        // }
+        // for(int i=0;i<size;i++){
+        //     if(freq[i]==2){
+        //         result.push_back(i);
+        //     }
+        // } 
+        // return result; 
+        sort(nums.begin(),nums.end());
+        vector<int> result;
+        int i=1;
+        while(i<nums.size()){
+            if(nums[i-1]==nums[i]){
+                result.push_back(nums[i]);
+                
+            }
+            i++;
+        }
+        return result;
+    }
+};
+//by self
