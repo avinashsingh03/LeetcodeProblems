@@ -1,0 +1,12 @@
+class Solution {
+public:
+    int minimumOneBitOperations(int n) {
+        //not legit question( difficult to understand problem statement)
+        int mask=n;
+        while(mask){
+            mask >>=1;
+            n^=mask;
+        }
+        return n; 
+    }
+};
