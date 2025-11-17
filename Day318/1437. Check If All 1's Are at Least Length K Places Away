@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool kLengthApart(vector<int>& nums, int k) {
+        bool ans=true;
+        int prevIdx=-1;
+        for(int i=0;i<nums.size();i++){
+            if(nums[i]==1 && prevIdx==-1){
+                prevIdx=i;
+            }
+            else if(nums[i]==1 && prevIdx!=-1){
+                if((i-prevIdx)>k){
+                    ans=true;
+                    prevIdx=i;
+                }
+                else{
+                    return false;
+                }
+            }
+            else{
+                continue;
+            }
+        }
+        return ans;
+    }
+};
+//by self
