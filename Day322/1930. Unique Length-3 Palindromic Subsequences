@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int countPalindromicSubsequence(string s) {
+        int size=s.length();
+        int count=0;
+        int left=0;
+        int right=size-1;
+        vector<bool> occurrence(26,false);
+        while(left<(right-1)){
+            if(occurrence[s[left]-'a']==false){
+                occurrence[s[left]-'a']=true;
+            }
+            else{
+                right=size-1;
+                left++;
+                continue;
+            }
+            while(right>(left+1)){
+                if(s[left]==s[right]){
+                    break;
+                }
+                right--;
+            }
+            vector<bool> freq(26,false);
+            for(int i=left+1;i<right;i++){
+                if(freq[s[i]-'a']==false){
+                    freq[s[i]-'a']=true;
+                    count++;
+                }
+            }
+            right=size-1;
+            left++;
+        }
+        return count;
+    }
+};
