@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int minimumOperations(vector<int>& nums) {
+        int operations=0;
+        for(auto val:nums){
+            if(val%3==0){
+                continue;
+            }
+            else{
+                val%=3;
+                if(val<(3-val)){
+                    operations+=val;
+                }
+                else{
+                    operations+=3-val;
+                }
+            }
+        }
+        return operations;
+    }
+};
+//by self.
