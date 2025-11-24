@@ -1,0 +1,12 @@
+class Solution {
+public:
+    vector<bool> prefixesDivBy5(vector<int>& nums) {
+        vector<bool> answer;
+        long int val=0;
+        for(auto i: nums){
+            val=(val*2+i)%5;
+            val==0?answer.push_back(true):answer.push_back(false);
+        }
+        return answer;
+    }
+};
