@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int smallestRepunitDivByK(int k) {
+        if(k%2==0 || k%5==0){ //even no. and no. divisible by 5 always give -1
+            return -1;
+        }
+        long long num=0;
+        long long size=0;
+        while(true){
+            num=(num*10+1)%k;
+            size++;
+            if(num==0){
+                return size;
+            }
+        }
+        return -1;
+    }
+};
+// by self;
