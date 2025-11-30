@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int minSubarray(vector<int>& nums, int p) {
+        unordered_map<int,set<int>> mp;
+        int n=nums.size();
+        long long suffix=0;
+        int ans=1e9;
+        for(int i=n-1;i>=0;i--){
+            suffix=(suffix+nums[i])%p;
+            mp[suffix].insert(i);
+            if(suffix==0){
+                ans=min(ans,i);
+            }
+        }
+
+        long long prefix=0;
+
+        for(int i=0;i<n;i++){
+            prefix=(prefix+nums[i])%p;
+            int val=p-prefix;
+            if(prefix==0){
+                val=0;
+                ans=min(ans,n-1-i);
+            }
+
+            if(mp.find(val)!=mp.end()){
+                auto it = mp[val].upper_bound(i);
+
+                if(it!=mp[val].end()){
+                    int index=*it;
+
+                    ans=min(ans,index-i-1);
+                }
+            }
+        }
+        if(ans==1e9){
+            return -1;
+        }
+        return ans;     
+    }
+};
