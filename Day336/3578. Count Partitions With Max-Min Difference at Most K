@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int countPartitions(vector<int>& nums, int k) {
+        // setup
+        int n = nums.size();
+        int MOD = 1e9 + 7;
+        vector<int> dp(n), acc(n);
+
+        // monotonic deque
+        deque<int> mnq; // goes up
+        deque<int> mxq; // goes down
+
+        // base case
+        dp[0] = 1;
+        acc[0] = 1;
+        mnq.push_back(0);
+        mxq.push_back(0);
+
+        // recursion
+        for(int l=0, r=1; r<n; r++)
+        {
+            // update mxq
+            while(!mxq.empty() && nums[r] > nums[mxq.back()])
+                mxq.pop_back();
+            mxq.push_back(r);
+            
+            // update mnq
+            while(!mnq.empty() && nums[r] < nums[mnq.back()])
+                mnq.pop_back();
+            mnq.push_back(r);
+
+            // update l
+            while(nums[mxq.front()] - nums[mnq.front()] > k)
+            {
+                if(mnq.front() <= l)
+                    mnq.pop_front();
+                if(mxq.front() <= l)
+                    mxq.pop_front();
+                l++;
+            }
+
+            // f(l, r) <= k
+            // dp[r] = dp[l-1] + dp[l] + dp[l+1] .. + dp[r-1]
+            
+            dp[r] =  (acc[r-1] - (l-2 >= 0 ? acc[l-2] : 0) + MOD) % MOD;
+            if(l == 0)
+                dp[r]++;
+            acc[r] = (acc[r-1] + dp[r]) % MOD;
+        }
+        return dp[n-1];
+    }
+};
