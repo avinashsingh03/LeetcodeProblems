@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int countOdds(int low, int high) {
+        if(low%2!=0 && high%2!=0){  //both are odd
+            return ((high-low)/2)+1;
+        }
+        else if(low%2!=0 && high%2==0){// low is odd and high is even
+            high--;
+            return ((high-low)/2)+1;
+        }
+        else if(low%2==0 && high%2!=0){// low is even and high is odd
+            low++;
+            return ((high-low)/2)+1;
+        }
+        else{ //both are even
+            low++;
+            high--;
+            return ((high-low)/2)+1;
+        }
+    }
+};
+
+//by self
