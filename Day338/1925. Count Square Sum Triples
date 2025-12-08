@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int countTriples(int n) {
+        int count=0;
+        for(int i=1;i<=n;i++){
+            for(int j=i;j<=n;j++){
+                double root=sqrt(i*i + j*j);
+                if(root==int(root) && root<=n){
+                    cout<<i<<" "<<j<<" "<<root<<endl;
+                    count++;
+                }
+            }
+        }
+        return count*2;
+    }
+};
+
+//by self
