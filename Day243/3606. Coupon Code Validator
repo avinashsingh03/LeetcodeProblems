@@ -1,0 +1,97 @@
+class Solution {
+
+public:
+
+    bool isvalid(string code){
+
+        if(code=="")
+
+            return false;
+
+        for(auto c:code){
+
+            if((c>=65 && c<=90) || (c>=97 && c<=122) || c=='_' ||(c>=48 && c<=57))
+
+                continue; 
+
+            else
+
+                return false;
+
+        }
+
+        return true;
+
+    }
+
+    vector<string> validateCoupons(vector<string>& code, vector<string>& businessLine, vector<bool>& isActive) {
+
+        vector<string> electronics;
+
+        vector<string> grocery;
+
+        vector<string> pharmacy;
+
+        vector<string> restraunt;
+
+
+        for(int i=0;i<code.size();i++){
+
+            if(isActive[i]==true && (businessLine[i]=="electronics" || businessLine[i]=="grocery" || businessLine[i]=="pharmacy" || businessLine[i]=="restaurant") ){
+
+                if(isvalid(code[i])){
+
+                    if(businessLine[i]=="electronics")
+
+                        electronics.push_back(code[i]);
+
+                    if(businessLine[i]=="grocery")
+
+                        grocery.push_back(code[i]);
+
+                    if(businessLine[i]=="pharmacy")
+
+                        pharmacy.push_back(code[i]);
+
+                    if(businessLine[i]=="restaurant")
+
+                        restraunt.push_back(code[i]);
+
+                }
+
+            }
+
+        }
+
+        sort(electronics.begin(),electronics.end());
+
+        sort(grocery.begin(),grocery.end());
+
+        sort(pharmacy.begin(),pharmacy.end());
+
+        sort(restraunt.begin(),restraunt.end());
+
+
+        for(auto val:grocery) {
+
+            electronics.push_back(val);
+
+        }
+
+        for(auto val:pharmacy) {
+
+            electronics.push_back(val);
+
+        }
+
+        for(auto val:restraunt){
+
+            electronics.push_back(val);
+
+        }
+
+        return electronics; 
+
+    }
+
+};
