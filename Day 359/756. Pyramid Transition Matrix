@@ -1,0 +1,41 @@
+class Solution {
+public:
+    unordered_map<string, vector<char>> mp;
+    unordered_map<string, bool> memo;
+
+    bool dfs(const string &cur) {
+        if (cur.size() == 1) return true;
+        if (memo.count(cur)) return memo[cur];
+
+        vector<string> nextRows;
+        buildNext(cur, 0, "", nextRows);
+
+        for (const string &row : nextRows) {
+            if (dfs(row)) {
+                return memo[cur] = true;
+            }
+        }
+        return memo[cur] = false;
+    }
+
+    void buildNext(const string &cur, int idx, string path, vector<string> &res) {
+        if (idx == cur.size() - 1) {
+            res.push_back(path);
+            return;
+        }
+
+        string key = cur.substr(idx, 2);
+        if (!mp.count(key)) return;
+
+        for (char ch : mp[key]) {
+            buildNext(cur, idx + 1, path + ch, res);
+        }
+    }
+
+    bool pyramidTransition(string bottom, vector<string>& allowed) {
+        for (const string &s : allowed) {
+            mp[s.substr(0, 2)].push_back(s[2]);
+        }
+        return dfs(bottom);
+    }
+};
