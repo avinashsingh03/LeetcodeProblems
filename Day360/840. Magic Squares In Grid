@@ -1,0 +1,63 @@
+class Solution {
+public:
+    bool isMagic(vector<vector<int>>& grid, int r, int c) {
+
+        vector<int> nums;
+        unordered_set<int> seen;
+
+        for (int i = r; i < r + 3; i++) {
+            for (int j = c; j < c + 3; j++) {
+
+                int val = grid[i][j];
+
+                if (val < 1 || val > 9 || seen.count(val))
+                    return false;
+
+                seen.insert(val);
+                nums.push_back(val);
+            }
+        }
+
+        int magicSum = 15;
+        for (int i = 0; i < 3; i++) {
+            int rowSum = 0;
+            for (int j = 0; j < 3; j++) {
+                rowSum += grid[r + i][c + j];
+            }
+            if (rowSum != magicSum)
+                return false;
+        }
+
+        for (int j = 0; j < 3; j++) {
+            int colSum = 0;
+            for (int i = 0; i < 3; i++) {
+                colSum += grid[r + i][c + j];
+            }
+            if (colSum != magicSum)
+                return false;
+        }
+
+        int diag1 = grid[r][c] + grid[r + 1][c + 1] + grid[r + 2][c + 2];
+        int diag2 = grid[r][c + 2] + grid[r + 1][c + 1] + grid[r + 2][c];
+        if (diag1 != magicSum || diag2 != magicSum)
+            return false;
+
+
+            return true;
+    }
+
+    int numMagicSquaresInside(vector<vector<int>>& grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+
+        int ct = 0;
+        for (int r = 0; r <= row - 3; r++) {
+            for (int c = 0; c <= col - 3; c++) {
+                if (isMagic(grid, r, c))
+                    ct++;
+            }
+        }
+
+        return ct;
+    }
+};
